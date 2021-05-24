@@ -1,2 +1,3 @@
+include ':incrementlint'
 include ':app'
 rootProject.name = "IncrementLint"
