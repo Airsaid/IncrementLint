@@ -6,8 +6,8 @@ import org.gradle.api.Project
 /**
  * @author airsaid
  */
-class IncrementLintPlugin : Plugin<Project> {
+open class IncrementLintPlugin : Plugin<Project> {
   override fun apply(project: Project) {
-    
+    println("apply: $project")
   }
 }

@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'kotlin'
     id 'java-gradle-plugin'
+    id 'maven-publish'
 }
 
 java {
@@ -23,6 +24,18 @@ gradlePlugin {
         create("IncrementLint") {
             id = "com.airsaid.incrementlint"
             implementationClass = "com.airsaid.incrementlint.IncrementLintPlugin"
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.airsaid'
+            artifactId = 'incrementlint'
+            version = '1.0.0'
+
+            from components.java
         }
     }
 }
