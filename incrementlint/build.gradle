@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'java-gradle-plugin'
 }
 
 java {
@@ -15,4 +16,13 @@ dependencies {
 sourceSets {
     main.resources.srcDir 'src/main/java'
     test.resources.srcDir 'src/test/java'
+}
+
+gradlePlugin {
+    plugins {
+        create("IncrementLint") {
+            id = "com.airsaid.incrementlint"
+            implementationClass = "com.airsaid.incrementlint.IncrementLintPlugin"
+        }
+    }
 }
