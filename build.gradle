@@ -22,8 +22,23 @@ allprojects {
         jcenter()
         mavenLocal()
     }
+    afterEvaluate { project ->
+        project.tasks.whenTaskAdded { task ->
+            if (task.name == "preDebugBuild") {
+                task.dependsOn(rootProject.tasks.named("copyGitHooks"))
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task copyGitHooks(type: Copy, description: "Copy the git hooks script to the .git/hooks directory.") {
+    from "git-hooks"
+    into ".git/hooks"
+    eachFile { file ->
+        file.setMode(0755)
+    }
 }
