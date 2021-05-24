@@ -1,0 +1,60 @@
+#! /bin/bash
+echo "Start lintIncrement scan..."
+
+# Get the first parameter of the push command (default is origin)
+remote=$1
+
+# Get the current local branch name
+breach="$(git rev-parse --abbrev-ref HEAD)"
+if [ $? != 0 ]
+then
+	echo "Failed to execute: git rev-parse --abbrev-ref HEAD"
+	exit 1
+fi
+
+# Use the git diff command to find the files involved in the current push
+remoteBreach="$remote/$breach"
+changedFile="$(git diff --name-only --diff-filter=ACMRTUXB $remoteBreach...HEAD)"
+if [ $? != 0 ]
+then
+	echo "Failed to execute: git diff --name-only --diff-filter=ACMRTUXB $remoteBreach...HEAD"
+	exit 1
+fi
+
+# If no file changes (except for deleted), skip check
+if [[ -z $changedFile ]]
+then
+	echo "No file changes found(except for deleted), skip check..."
+	exit 0
+fi
+
+# Get workspace directory
+workDir="$(git rev-parse --show-toplevel)"
+if [ $? != 0 ]
+then
+	echo "Failed to execute: git rev-parse --show-toplevel"
+	exit 1
+fi
+
+# Convert the changed file string to an array
+changedFiles=(${changedFile//\\/n})
+fileParams=""
+for name in "${changedFiles[@]}"
+do
+	filePath="$workDir/$name"
+	echo $filePath
+	fileParams="$fileParams$filePath,"
+done
+fileParams="${fileParams:0:${#fileParams}-1}"
+
+# Execute lintIncrement scan task
+./gradlew lintIncrement -PFiles=$fileParams
+
+# Get result, Stop push if there is an error
+if [ $? != 0 ]
+then
+	echo "Found errors! please fix before push!"
+	exit 1
+fi
+
+exit 0
