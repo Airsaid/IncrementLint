@@ -5,9 +5,15 @@ plugins {
     id 'maven-publish'
 }
 
+def incrementLintVersion = "1.0.0"
+
+def isReleaseBuild = !incrementLintVersion.endsWith('-SNAPSHOT')
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencies {
@@ -32,12 +38,59 @@ gradlePlugin {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        release(MavenPublication) {
             groupId = 'com.airsaid'
             artifactId = 'incrementlint'
-            version = '1.0.0'
+            version = incrementLintVersion
 
             from components.java
+
+            pom {
+                name = 'IncrementLint'
+                description = 'A Gradle Plugin that supports Lint increment scanning.'
+                url = 'https://github.com/Airsaid/IncrementLint'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'airsaid'
+                        name = 'Airsaid'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/Airsaid/IncrementLint.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/Airsaid/IncrementLint.git'
+                    url = 'https://github.com/Airsaid/IncrementLint'
+                }
+            }
         }
+    }
+
+    repositories {
+        maven {
+            url = isReleaseBuild
+                    ? 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    : 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            credentials {
+                def properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+                username = properties.hasProperty('sonatype.username') ? properties.getProperty("sonatype.username") : ''
+                password = properties.hasProperty('sonatype.password') ? properties.getProperty("sonatype.password") : ''
+            }
+        }
+    }
+}
+
+
+if (isReleaseBuild) {
+    apply plugin: 'signing'
+    signing {
+        required { gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications
     }
 }
