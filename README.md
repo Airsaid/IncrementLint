@@ -1,3 +1,9 @@
+<p align="left">
+    <a href="https://plugins.gradle.org/plugin/com.airsaid.incrementlint">
+        <img src="https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/airsaid/incrementlint/com.airsaid.incrementlint.gradle.plugin/maven-metadata.xml.svg?label=Gradle%20Plugins%20Portal" />
+    </a>
+</p>
+
 # IncrementLint
 A Gradle Plugin that supports Lint increment scanning.
 
@@ -10,7 +16,7 @@ buildscript {
     ......
     dependencies {
         ......
-        classpath "com.airsaid:incrementlint:1.0.0"
+        classpath "com.airsaid:incrementlint:${last_version}"
     }
 }
 ```
