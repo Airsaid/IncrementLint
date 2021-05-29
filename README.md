@@ -1,10 +1,6 @@
-<p align="left">
-    <a href="https://plugins.gradle.org/plugin/com.airsaid.incrementlint">
-        <img src="https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/airsaid/incrementlint/com.airsaid.incrementlint.gradle.plugin/maven-metadata.xml.svg?label=Gradle%20Plugins%20Portal" />
-    </a>
-</p>
-
 # IncrementLint
+[![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/airsaid/incrementlint/com.airsaid.incrementlint.gradle.plugin/maven-metadata.xml.svg)](https://plugins.gradle.org/plugin/com.airsaid.incrementlint)
+
 A Gradle Plugin that supports Lint increment scanning.
 
 NODE: The target support Android Gradle Plugin version is 4.1.0, No guarantee that other versions will be available.
